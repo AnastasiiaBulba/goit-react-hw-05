@@ -9,3 +9,8 @@
   color: #fff;
   text-decoration: none;
 }
+
+.active {
+  font-weight: bold;
+  color: #ff6b08;
+}
