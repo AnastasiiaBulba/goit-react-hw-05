@@ -10,14 +10,17 @@ const MoviesPage = () => {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = async (e) => {
     e.preventDefault();
 
     setError(null);
+    setLoading(true);
 
     if (!query.trim()) {
       setError("Please enter a search term!");
+      setLoading(false);
       return;
     }
 
@@ -32,6 +35,8 @@ const MoviesPage = () => {
     } catch (err) {
       setError("Failed to fetch movies. Please try again later.");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -46,7 +51,7 @@ const MoviesPage = () => {
           className={s.input}
           placeholder="Enter movie title..."
         />
-        <button type="submit" className={s.button}>
+        <button type="submit" className={s.button} disabled={loading}>
           Search
         </button>
       </form>

@@ -14,3 +14,21 @@ a {
 a:hover {
   color: #ff6b08;
 }
+
+.noMovies {
+  font-size: 18px;
+  color: #555;
+  text-align: center;
+}
+
+.listItem {
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.movieLink {
+  font-weight: bold;
+  display: block;
+  padding: 8px 0;
+}

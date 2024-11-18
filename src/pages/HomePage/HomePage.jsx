@@ -6,7 +6,7 @@ const API_URL = "https://api.themoviedb.org/3/trending/movie/day";
 const API_KEY = "fc90f89e61d48fb7a14965701c4b4303";
 
 const HomePage = () => {
-  const [movies, setMovies] = useState;
+  const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     axios
@@ -20,7 +20,7 @@ const HomePage = () => {
   return (
     <div>
       <h1>Trending Movies</h1>
-      <MovieList movies={movies} />
+      {movies.length > 0 ? <MovieList movies={movies} /> : <p>Loading...</p>}
     </div>
   );
 };
