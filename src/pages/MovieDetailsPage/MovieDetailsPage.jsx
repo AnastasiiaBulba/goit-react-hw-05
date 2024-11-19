@@ -1,15 +1,23 @@
-import { useEffect, useState } from "react";
-import { useParams, Link, Routes, Route } from "react-router-dom";
+import { Suspense, useEffect, useState } from "react";
+import {
+  useParams,
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import axios from "axios";
-import MovieCast from "../../components/MovieCast/MovieCast";
-import MovieReviews from "../../components/MovieReviews/MovieReviews";
 import s from "./MovieDetailsPage.module.css";
+import Loader from "../../components/Loader/Loader";
 
 const API_URL = "https://api.themoviedb.org/3/movie";
-const API_KEY = "fc90f89e61d48fb7a14965701c4b4303";
+const TOKEN =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYzkwZjg5ZTYxZDQ4ZmI3YTE0OTY1NzAxYzRiNDMwMyIsIm5iZiI6MTczMTkxMjI1Ny41NTYzMjY2LCJzdWIiOiI2NzNhZGRlZjgzYjY2NmE0ZTlhMmIxOWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.unJRqKAF8eST31FQ5krD0nhM8OrGXXC5alDaQ9I1zZc";
 
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(null);
 
@@ -17,7 +25,7 @@ const MovieDetailsPage = () => {
     const fetchMovieDetails = async () => {
       try {
         const response = await axios.get(`${API_URL}/${movieId}`, {
-          params: { api_key: API_KEY },
+          headers: { Authorization: `Bearer ${TOKEN}` },
         });
         setMovie(response.data);
       } catch (err) {
@@ -29,14 +37,21 @@ const MovieDetailsPage = () => {
     fetchMovieDetails();
   }, [movieId]);
 
+  const handleGoBack = () => {
+    navigate(location.state?.from || "/");
+  };
+
   if (error) return <p className={s.error}>{error}</p>;
-  if (!movie) return <p>Loading...</p>;
+  if (!movie) return <Loader />;
 
   return (
     <div className={s.container}>
-      <Link to="/" className={s.backLink}>
+      {/* <Link to="/" className={s.backLink}>
         Go back
-      </Link>
+      </Link> */}
+      <button onClick={handleGoBack} className={s.backLink}>
+        Go back
+      </button>
       <h1>{movie.title}</h1>
       <p>{movie.overview}</p>
       <img
@@ -45,14 +60,17 @@ const MovieDetailsPage = () => {
         className={s.poster}
       />
       <div className={s.additional}>
-        <Link to="cast">Cast</Link>
-        <Link to="reviews">Reviews</Link>
+        <Link to="cast" state={{ from: location.state?.from }}>
+          Cast
+        </Link>
+        <Link to="reviews" state={{ from: location.state?.from }}>
+          Reviews
+        </Link>
       </div>
 
-      <Routes>
-        <Route path="cast" element={<MovieCast movieId={movieId} />} />
-        <Route path="reviews" element={<MovieReviews movieId={movieId} />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Outlet />
+      </Suspense>
     </div>
   );
 };
