@@ -21,6 +21,11 @@ const MovieDetailsPage = () => {
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(null);
 
+  //  Тут шлях запиту звідки ми йдемо
+
+  const from = location.state?.from || "/";
+  const query = location.state?.query || "";
+
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
@@ -37,8 +42,17 @@ const MovieDetailsPage = () => {
     fetchMovieDetails();
   }, [movieId]);
 
+  // const handleGoBack = () => {
+  //   // navigate(location.state?.from || "/");
+  //   navigate(query ? `${from}?query=${query}` : from);
+  // };
+
+  // const handleGoBack = () => {
+  //   navigate(from, { state: { query } });
+  // };
+
   const handleGoBack = () => {
-    navigate(location.state?.from || "/");
+    navigate(-1);
   };
 
   if (error) return <p className={s.error}>{error}</p>;
@@ -60,10 +74,12 @@ const MovieDetailsPage = () => {
         className={s.poster}
       />
       <div className={s.additional}>
-        <Link to="cast" state={{ from: location.state?.from }}>
+        {/* <Link to="cast" state={{ from: location.state?.from }}> */}
+        <Link to="cast" state={{ from, query }}>
           Cast
         </Link>
-        <Link to="reviews" state={{ from: location.state?.from }}>
+        {/* <Link to="reviews" state={{ from: location.state?.from }}> */}
+        <Link to="cast" state={{ from, query }}>
           Reviews
         </Link>
       </div>
