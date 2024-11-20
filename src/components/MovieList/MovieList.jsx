@@ -4,7 +4,7 @@ import s from "./MovieList.module.css";
 const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
 const MovieList = ({ movies }) => {
-  const location = useLocation();
+  const location = useLocation(); // Отримуємо поточне розташування
 
   if (movies.length === 0) {
     return (
@@ -18,7 +18,7 @@ const MovieList = ({ movies }) => {
         <li key={id} className={s.listItem}>
           <Link
             to={`/movies/${id}`}
-            state={{ from: location.pathname }}
+            state={{ from: location }} // Передаємо інформацію про попереднє розташування
             className={s.movieLink}
           >
             {poster_path ? (

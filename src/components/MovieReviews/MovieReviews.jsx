@@ -5,7 +5,6 @@ import Loader from "../Loader/Loader";
 import { useParams } from "react-router-dom";
 
 const API_URL = "https://api.themoviedb.org/3/movie";
-// const API_KEY = "fc90f89e61d48fb7a14965701c4b4303";
 const TOKEN =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmYzkwZjg5ZTYxZDQ4ZmI3YTE0OTY1NzAxYzRiNDMwMyIsIm5iZiI6MTczMTkxMjI1Ny41NTYzMjY2LCJzdWIiOiI2NzNhZGRlZjgzYjY2NmE0ZTlhMmIxOWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.unJRqKAF8eST31FQ5krD0nhM8OrGXXC5alDaQ9I1zZc";
 

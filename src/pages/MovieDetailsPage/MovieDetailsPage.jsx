@@ -1,11 +1,5 @@
-import { Suspense, useEffect, useState } from "react";
-import {
-  useParams,
-  Link,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { Suspense, useEffect, useRef, useState } from "react";
+import { useParams, Link, Outlet, useLocation } from "react-router-dom";
 import axios from "axios";
 import s from "./MovieDetailsPage.module.css";
 import Loader from "../../components/Loader/Loader";
@@ -17,14 +11,8 @@ const TOKEN =
 const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const location = useLocation();
-  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [error, setError] = useState(null);
-
-  //  Тут шлях запиту звідки ми йдемо
-
-  const from = location.state?.from || "/";
-  const query = location.state?.query || "";
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -42,30 +30,17 @@ const MovieDetailsPage = () => {
     fetchMovieDetails();
   }, [movieId]);
 
-  // const handleGoBack = () => {
-  //   // navigate(location.state?.from || "/");
-  //   navigate(query ? `${from}?query=${query}` : from);
-  // };
-
-  // const handleGoBack = () => {
-  //   navigate(from, { state: { query } });
-  // };
-
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+  // Створення посилання "Назад" з використанням useRef
+  const goBackLink = useRef(location.state?.from ?? "/");
 
   if (error) return <p className={s.error}>{error}</p>;
   if (!movie) return <Loader />;
 
   return (
     <div className={s.container}>
-      {/* <Link to="/" className={s.backLink}>
+      <Link to={goBackLink.current} className={s.backLink}>
         Go back
-      </Link> */}
-      <button onClick={handleGoBack} className={s.backLink}>
-        Go back
-      </button>
+      </Link>
       <h1>{movie.title}</h1>
       <p>{movie.overview}</p>
       <img
@@ -74,14 +49,8 @@ const MovieDetailsPage = () => {
         className={s.poster}
       />
       <div className={s.additional}>
-        {/* <Link to="cast" state={{ from: location.state?.from }}> */}
-        <Link to="cast" state={{ from, query }}>
-          Cast
-        </Link>
-        {/* <Link to="reviews" state={{ from: location.state?.from }}> */}
-        <Link to="cast" state={{ from, query }}>
-          Reviews
-        </Link>
+        <Link to="cast">Cast</Link>
+        <Link to="reviews">Reviews</Link>
       </div>
 
       <Suspense fallback={<Loader />}>
